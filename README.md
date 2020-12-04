@@ -68,7 +68,7 @@
 
 <br/>
 <h2 name="license">📝 Licença</h2>
-<p>Este projeto está sob uma licença MIT. Veja mais informações em <a href="https://github.com/steferson-augusto/puppeteer-image-name/blob/main/LICENSE" target="_blank">LICENSE</a>.</p>
+<p>Este projeto está sob uma licença MIT. Veja mais informações em <a href="https://github.com/steferson-augusto/discord-bot-dice/blob/master/LICENSE" target="_blank">LICENSE</a>.</p>
 
 ---
 
