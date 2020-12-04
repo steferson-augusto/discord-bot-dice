@@ -8,7 +8,8 @@ module.exports.run = async (client, msg, args) => {
   const value = args.reduce((sum, cur) => {
     const prefix = cur.substring(0, 1)
     const max = Number(cur.substring(1, cur.length))
-    if (prefix.toLowerCase() == 'd' ) {
+    if (max === 1) return sum += 1
+    else if (prefix.toLowerCase() == 'd') {
       let dice = 0
       let cont = 0
       while (cont >= 0) {
