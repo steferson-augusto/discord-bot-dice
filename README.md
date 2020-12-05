@@ -66,6 +66,55 @@
   <img src="./github/anel.png" style="border-radius: 6px;" alt="Forja de anéis espaciais" width="640" >
 </p>
 
+
+<h3>d!status {...params}</h3>
+<p>
+  Exibe o status de seu respectivo personagem.
+</p>
+
+> d!status
+
+<p align="center">
+  <img src="./github/status.png" style="border-radius: 6px;" alt="Exibir status" width="640" >
+</p>
+
+---
+
+<p>
+  Altera o tamanho máximo da respectiva barra ou cria uma nova barra caso não exista.
+</p>
+
+> d!status hp:pool=60
+
+<p align="center">
+  <img src="./github/status_pool.png" style="border-radius: 6px;" alt="Aumentar pool" width="640" >
+</p>
+
+---
+
+<p>
+  Soma ou subtrai o parâmetro da respectiva barra.
+</p>
+
+> d!status hp:add=5
+
+<p align="center">
+  <img src="./github/status_add.png" style="border-radius: 6px;" alt="Adicionar status" width="640" >
+</p>
+
+---
+
+<p>
+  Altera o valor corrente da respectiva barra para o valor passado como parâmetro.
+</p>
+
+> d!status hp:current=20
+
+<p align="center">
+  <img src="./github/status_current.png" style="border-radius: 6px;" alt="Alterar valor" width="640" >
+</p>
+
+
 <br/>
 <h2 name="license">📝 Licença</h2>
 <p>Este projeto está sob uma licença MIT. Veja mais informações em <a href="https://github.com/steferson-augusto/discord-bot-dice/blob/master/LICENSE" target="_blank">LICENSE</a>.</p>
