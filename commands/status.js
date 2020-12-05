@@ -119,8 +119,8 @@ module.exports.run = async (client, msg, args) => {
     }
   })
 
-  const maxColors = ['#ef5350', '#64b5f6', '#ffb74d', '#aed581', '#9575cd', '#a1887f']
-  const currentColors = ['#e57373', '#bbdefb', '#ffe0b2', '#dcedc8', '#d1c4e9', '#d7ccc8']
+  const maxColors = ['#ef5350', '#42a5f5', '#ffca28', '#8bc34a', '#9575cd', '#8d6e63']
+  const currentColors = ['#e57373', '#bbdefb', '#ffecb3', '#dcedc8', '#d1c4e9', '#d7ccc8']
   
   await Promise.all(promises)
 
