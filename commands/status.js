@@ -173,7 +173,7 @@ module.exports.run = async (client, msg, args) => {
   const avatar = await Canvas.loadImage(avatarURL)
   ctx.drawImage(avatar, 25, 25, 200, 200)
 
-  const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png')
+  const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'status.png')
   
   // msg.delete().catch(() => {})
   msg.channel.send(attachment)
