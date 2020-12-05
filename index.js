@@ -2,6 +2,7 @@ const express = require('express')
 const Discord = require("discord.js")
 
 require('dotenv').config()
+require('./database')
 
 const app = express()
 
