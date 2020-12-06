@@ -23,9 +23,12 @@ module.exports.run = async (client, msg, args) => {
     
     // msg.delete().catch(() => {})
     msg.channel.send(attachment)
-    const channel = msg.guild.channels.cache.get('784837970905006120')
-    const { id: message } = await channel.send(attachment)
-    StatusMessage.create({ user, message }, { channel })
+
+    if (args.length > 0) {
+      const channel = msg.guild.channels.cache.get('784837970905006120')
+      const { id: message } = await channel.send(attachment)
+      StatusMessage.create({ user, message }, { channel })
+    }
   } else {
     msg.channel.send('```diff\n- Você precisa do cargo "Player" para usar este comando.\n```')
   }
