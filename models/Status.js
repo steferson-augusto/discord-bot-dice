@@ -1,6 +1,6 @@
 const { Model, DataTypes } = require('sequelize')
 
-class Status extends Model {
+class Status extends Model {  
   static init(sequelize) {
     super.init({
       user: DataTypes.STRING,
@@ -8,7 +8,7 @@ class Status extends Model {
       max: DataTypes.INTEGER,
       current: DataTypes.INTEGER
     }, {
-      sequelize, 
+      sequelize
     })
   }
 }
