@@ -184,6 +184,15 @@ const createImage = async (data, avatarURL) => {
   return attachment
 }
 
+const checkUser = async (msg, user) => {
+  try {
+    await msg.guild.members.fetch(user)
+    return true
+  } catch {
+    return false
+  }
+}
+
 module.exports = {
-  updateStatus, getValues, createImage
+  updateStatus, getValues, createImage, checkUser
 }
