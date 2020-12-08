@@ -15,7 +15,8 @@ module.exports = {
       },
       label: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
       }
     })
   },

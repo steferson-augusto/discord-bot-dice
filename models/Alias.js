@@ -6,7 +6,7 @@ class Alias extends Model {
       user: DataTypes.STRING,
       label: DataTypes.STRING,
     }, {
-      sequelize
+      sequelize, tableName: 'aliases'
     })
   }
 }

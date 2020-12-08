@@ -16,7 +16,7 @@ class StatusMessage extends Model {
           })
         }
       },
-      sequelize,  tableName: 'status_messages'
+      sequelize, tableName: 'status_messages'
     })
   }
 }

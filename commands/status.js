@@ -1,17 +1,23 @@
 const Status = require('../models/Status')
 const StatusMessage = require('../models/StatusMessage')
-const { getValues, createImage, updateStatus, checkUser } = require('../utils/status')
+const Alias = require('../models/Alias')
+const { getValues, createImage, updateStatus } = require('../utils/status')
+const { isMaster, isMember, isPlayer } = require('../utils/services')
 
 module.exports.run = async (client, msg, args) => {
   let user = msg.author.id
   
-  const isMaster = msg.member.roles.cache.has('785276366610104371')
-  if (isMaster) user = args.shift() || 'null'
+  const master = isMaster(msg)
+  if (master) {
+    const userId = args.shift()
+    const alias = await Alias.findOne({ where: { label: userId } })
+    user = alias.user || userId
+  }
 
-  const isMember = await checkUser(msg, user)
-  const hasPermission = msg.member.roles.cache.has('784934956454772756') || isMaster
+  const member = await isMember(msg, user)
+  const hasPermission = isPlayer(msg) || master
 
-  if (!isMember) {
+  if (!member) {
     msg.channel.send('```diff\n- Digite o alias/id do player corretamente.\n```')
   }
   else if (hasPermission) {
