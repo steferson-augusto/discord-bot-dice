@@ -3,7 +3,6 @@ const Discord = require('discord.js')
 
 const Status = require('../models/Status')
 
-const labels = { hp: 'HP', mana: 'Mana', ki: 'Ki' }
 const methodKeys = ['pool', 'add', 'current']
 
 const capitalize = text => {
@@ -23,12 +22,14 @@ const setStatus = {
           label: capitalize(label),
           max: value,
           current: value
-        }
+        },
+        lock: false
       })
 
       const current = status[0].current > value ? value : status[0].current
-      await status[0].update({ max: value, current })
-    } catch {
+      await status[0].update({ max: value, current }, { lock: false })
+    } catch (err) {
+      console.log(err)
       msg.channel
         .send("```diff\n- Tenha certeza de usar o comando corretamente\nExemplo: d!status hp:pool=100\n```")
     }
@@ -76,7 +77,7 @@ const updateStatus = async (msg, args, user) => {
   const promises = args.map(async arg => {
     try {
       const [name, rest] = arg.toLowerCase().split(':')
-      const label = labels[name]
+      const label = name.toUpperCase().replace('_', ' ')
       const [method, value] = rest.split('=')
 
       if (methodKeys.includes(method)) {
@@ -95,8 +96,8 @@ const updateStatus = async (msg, args, user) => {
 } 
 
 const colors = {
-  max: ['#ef5350', '#42a5f5', '#ffca28', '#8bc34a', '#9575cd', '#8d6e63'],
-  current: ['#e57373', '#bbdefb', '#ffecb3', '#dcedc8', '#d1c4e9', '#d7ccc8']
+  max: ['#ef5350', '#8bc34a', '#42a5f5', '#ffca28', '#9575cd', '#ff5722'],
+  current: ['#e57373', '#dcedc8', '#bbdefb', '#ffecb3', '#d1c4e9', '#ffab91']
 }
 
 const roundRect = (ctx, x, y, width, height, radius, fill, stroke) => {
