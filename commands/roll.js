@@ -1,3 +1,4 @@
+const Discord = require('discord.js')
 
 const roll = max => Math.floor(Math.random() * max) + 1
 
@@ -5,8 +6,9 @@ module.exports.run = async (client, msg, args) => {
   let text = ''
   let ampliacao = 0
 
-  const { dices, fix } = args.reduce((result, arg) => {
+  const { dices, fix, label } = args.reduce((result, arg) => {
     if (arg.includes('d')) {
+      result.label += ` ${arg}`
       const [num, face] = arg.split('d')
       const quantity = Number(num) || 1
       for (let index = 0; index < quantity; index++) {
@@ -18,7 +20,7 @@ module.exports.run = async (client, msg, args) => {
     }
 
     return result
-  }, { dices: [], fix: 0 })
+  }, { dices: [], fix: 0, label: '' })
 
   const value = dices.reduce((sum, max) => {
     if (max <= 1) return sum += 1
@@ -39,6 +41,15 @@ module.exports.run = async (client, msg, args) => {
   text = text.substring(2)
   const result = `[${text}]${ampliacao > 0 ? `{${ampliacao}}` : ''}${textFix}: ${value}`
 
-  // msg.delete().catch(() => {})
-  msg.channel.send(result)
+  const name = msg.author.username
+  const avatarUrl = await msg.author.displayAvatarURL({ format: 'jpg' })
+
+  const embed = new Discord.MessageEmbed()
+  .setAuthor(name, avatarUrl)
+  .setTitle(`${label}${textFix}`)
+	.setDescription(result)
+
+  msg.channel.send(embed)
+
+  msg.delete()
 }
