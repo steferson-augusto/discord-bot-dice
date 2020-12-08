@@ -35,6 +35,8 @@ const check = async (msg, user, roles) => {
   return valid
 }
 
+const emoji = (msg, id) => msg.guild.emojis.cache.get(id).toString()
+
 module.exports = {
-  isMaster, isPlayer, isMember, check
+  isMaster, isPlayer, isMember, check, emoji
 }
