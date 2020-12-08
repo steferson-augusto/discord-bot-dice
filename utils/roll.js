@@ -1,16 +1,21 @@
-const roll = dados => {
-  const value = dados.reduce((total, dado) => {
-    const prefixo = dado.substring(0, 1)
-    if (prefixo.toLowerCase() === 'd') {
-      const max = Number(dado.substring(1, dado.length))
-      let rolagem = Number(max)
-      while (rolagem === max) {
-        rolagem = Math.floor(Math.random() * max) + 1
-        total += rolagem
+const roll = dices => {
+  const value = dices.reduce((total, dice) => {
+    if (dice.includes('d')) {
+      const [num, face] = dice.split('d')
+      const quantity = Number(num) || 1
+      const max = Number(face)
+      if (max <= 1) return total += 1
+
+      for (let index = 0; index < quantity; index++) {
+        let rolagem = Number(max)
+        while (rolagem === max) {
+          console.log(`d${max}`)
+          rolagem = Math.floor(Math.random() * max) + 1
+          total += rolagem
+        }
       }
-    } else {
-      total += Number(dado)
-    }
+      
+    } else total += Number(dice)
 
     return total
   }, 0)
