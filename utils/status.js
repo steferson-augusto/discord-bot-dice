@@ -136,7 +136,7 @@ const roundRect = (ctx, x, y, width, height, radius, fill, stroke) => {
 }
 
 const centerStatusText = (ctx, text) => {
-  const width = (700 - 305 - ctx.measureText(text).width) / 2 + 280
+  const width = (600 - 160 - ctx.measureText(text).width) / 2 + 140
   return width
 }
 
@@ -147,38 +147,38 @@ const getValues = user => [
 ]
 
 const createImage = async (data, avatarURL) => {
-  const canvas = Canvas.createCanvas(700, 250)
+  let height = data.length * 30 + 30
+  if (height < 140) height = 140
+  const canvas = Canvas.createCanvas(600, height)
   const ctx = canvas.getContext('2d')
-  const background = await Canvas.loadImage('assets/images/background.png')
 
-  ctx.drawImage(background, 0, 0, canvas.width, canvas.height)
+  ctx.beginPath()
+  ctx.rect(0, 0, 600, height)
+  ctx.fillStyle = '#323232'
+  ctx.fill()
 
   ctx.strokeStyle = '#222'
 
-  let size = -15
+  let positionTop = -20
   data.forEach((value, index) => {
-    size += 55
-    ctx.font = '18px sans-serif'
-    ctx.fillStyle = '#E1E1E6'
-    ctx.fillText(value.label, canvas.width / 2.5, size)
-
+    positionTop += 30
     ctx.fillStyle = colors.max[index] || '#bdbdbd'
-    roundRect(ctx, 280, size + 10, canvas.width - 305, 20, 8, true)
+    roundRect(ctx, 140, positionTop + 10, canvas.width - 160, 20, 8, true)
     ctx.fillStyle = colors.current[index] || '#e0e0e0'
-    roundRect(ctx, 280, size + 10, (canvas.width - 305) * value.current / value.max, 20, 8, true, false)
+    roundRect(ctx, 140, positionTop + 10, (canvas.width - 160) * value.current / value.max, 20, 8, true, false)
     ctx.font = '16px sans-serif'
     ctx.fillStyle = '#111'
-    const text = `${value.current} / ${value.max}`
-    ctx.fillText(text, centerStatusText(ctx, text), size + 26)
+    const text = `${value.label}  ${value.current} / ${value.max}`
+    ctx.fillText(text, centerStatusText(ctx, text), positionTop + 26)
   })
 
   ctx.beginPath()
-  ctx.arc(125, 125, 100, 0, Math.PI * 2, true)
+  ctx.arc(70, 70, 50, 0, Math.PI * 2, true)
   ctx.closePath()
   ctx.clip()
   
   const avatar = await Canvas.loadImage(avatarURL)
-  ctx.drawImage(avatar, 25, 25, 200, 200)
+  ctx.drawImage(avatar, 20, 20, 100, 100)
   const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'status.png')
 
   return attachment
