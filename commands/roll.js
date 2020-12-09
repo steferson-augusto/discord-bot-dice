@@ -46,10 +46,20 @@ module.exports.run = async (client, msg, args) => {
 
   const embed = new Discord.MessageEmbed()
   .setAuthor(name, avatarUrl)
-  .setTitle(`${label}${textFix}`)
-	.setDescription(result)
+  .setTitle(`d!roll ${label}${textFix}`)
+  .setDescription(result)
+  
+  if (msg.channel.id === '681342318334443569') {
+    msg.channel.send(embed)
+  } else {
+    const channel = msg.guild.channels.cache.get('681342318334443569')
+    channel.send(embed)
+    const message = await msg.channel.send('```diff\n- Corno, rolagem de dados é no outro canal\n- Vai ter que ver o resultado lá para largar de ser besta\n```')
+    setTimeout(() => {
+      message.delete()
+    }, 5000)
+  }
 
-  msg.channel.send(embed)
 
   msg.delete()
 }
