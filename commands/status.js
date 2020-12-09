@@ -2,20 +2,20 @@ const Status = require('../models/Status')
 const StatusMessage = require('../models/StatusMessage')
 const Alias = require('../models/Alias')
 const { getValues, createImage, updateStatus } = require('../utils/status')
-const { isMaster, isMember, isPlayer } = require('../utils/services')
+const { isMaster, isMember, isPlayer, getChannel, getMemberAvatarURL } = require('../utils/services')
 
 module.exports.run = async (client, msg, args) => {
   let user = msg.author.id
   
-  const master = isMaster(msg)
+  const master = isMaster()
   if (master) {
     const userId = args.shift()
     const alias = await Alias.findOne({ where: { label: userId } })
     user = alias.user || userId
   }
 
-  const member = await isMember(msg, user)
-  const hasPermission = isPlayer(msg) || master
+  const member = await isMember(user)
+  const hasPermission = isPlayer() || master
 
   if (!member) {
     msg.channel.send('```diff\n- Digite o alias/id do player corretamente.\n```')
@@ -32,8 +32,7 @@ module.exports.run = async (client, msg, args) => {
 
     const data = statuses.length > 0 ? statuses : values
     // const avatarURL = await msg.author.displayAvatarURL({ format: 'jpg' })
-    const member = await msg.guild.members.fetch(user)
-    const avatarURL = await member.user.displayAvatarURL({ format: 'jpg' })
+    const avatarURL = await getMemberAvatarURL(user)
 
     const attachment = await createImage(data, avatarURL)
     
@@ -41,7 +40,7 @@ module.exports.run = async (client, msg, args) => {
     msg.channel.send(attachment)
 
     if (args.length > 0) {
-      const channel = msg.guild.channels.cache.get('784837970905006120')
+      const channel = getChannel('784837970905006120')
       const { id: message } = await channel.send(attachment)
       StatusMessage.create({ user, message }, { channel })
     }

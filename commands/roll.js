@@ -1,5 +1,7 @@
 const Discord = require('discord.js')
 
+const { getChannel, isChannel } = require('../utils/services')
+
 const roll = max => Math.floor(Math.random() * max) + 1
 
 module.exports.run = async (client, msg, args) => {
@@ -49,10 +51,10 @@ module.exports.run = async (client, msg, args) => {
   .setTitle(`d!roll ${label}${textFix}`)
   .setDescription(result)
   
-  if (msg.channel.id === '681342318334443569') {
+  if (isChannel('681342318334443569')) {
     msg.channel.send(embed)
   } else {
-    const channel = msg.guild.channels.cache.get('681342318334443569')
+    const channel = getChannel('681342318334443569')
     channel.send(embed)
     const message = await msg.channel.send('```diff\n- Corno, rolagem de dados é no outro canal\n- Vai ter que ver o resultado lá para largar de ser besta\n```')
     setTimeout(() => {

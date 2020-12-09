@@ -1,8 +1,12 @@
-const isMaster = msg => msg.member.roles.cache.has('785276366610104371')
+let msg = null
 
-const isPlayer = msg => msg.member.roles.cache.has('784934956454772756')
+const setMessage = message => msg = message
 
-const isMember = async (msg, user) => {
+const isMaster = () => msg.member.roles.cache.has('785276366610104371')
+
+const isPlayer = () => msg.member.roles.cache.has('784934956454772756')
+
+const isMember = async user => {
   try {
     await msg.guild.members.fetch(user)
     return true
@@ -11,7 +15,7 @@ const isMember = async (msg, user) => {
   }
 }
 
-const check = async (msg, user, roles) => {
+const check = async (user, roles) => {
   const validate = {
     master: {
       value: isMaster(msg),
@@ -35,8 +39,18 @@ const check = async (msg, user, roles) => {
   return valid
 }
 
-const emoji = (msg, id) => msg.guild.emojis.cache.get(id).toString()
+const getChannel = id => msg.guild.channels.cache.get(id)
+
+const isChannel = id => msg.channel.id === id
+
+const emoji = id => msg.guild.emojis.cache.get(id).toString()
+
+const getMemberAvatarURL = async id => {
+  const member = await msg.guild.members.fetch(id)
+  const avatarURL = await member.user.displayAvatarURL({ format: 'jpg' })
+  return avatarURL
+}
 
 module.exports = {
-  isMaster, isPlayer, isMember, check, emoji
+  isMaster, isPlayer, isMember, check, emoji, getChannel, isChannel, getMemberAvatarURL, setMessage
 }

@@ -1,8 +1,9 @@
 const express = require('express')
 const Discord = require("discord.js")
-
 require('dotenv').config()
+
 require('./database')
+const { setMessage } = require('./utils/services')
 
 const app = express()
 
@@ -36,6 +37,7 @@ client.on('message', msg => {
 
   try {
     const commandFile = require(`./commands/${command}.js`)
+    setMessage(msg)
     commandFile.run(client, msg, args)
   } catch (error) {
     console.error(error)

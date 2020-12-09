@@ -6,7 +6,7 @@ module.exports.run = async (client, msg, args) => {
   let embed = new Discord.MessageEmbed()
 	.setColor('#ffeb3b')
 	.setTitle('d!roll')
-	.setDescription(`${emoji(msg, '785952478566023178')} Executa rolagem de dados com apliação`)
+	.setDescription(`${emoji('785952478566023178')} Executa rolagem de dados com apliação`)
 	.addFields(
     { name: 'd!roll d12 d6 d6 +4', value: '> Rola d12 + 2d6 +4' },
     { name: 'Resposta: [12, 2, 2]{3} +4: 23', value: '> [rolagens]{ampliações} fixo: resultado final' }
@@ -31,7 +31,7 @@ module.exports.run = async (client, msg, args) => {
   embed = new Discord.MessageEmbed()
 	.setColor('#0099ff')
 	.setTitle('d!anel')
-	.setDescription(`${emoji(msg, '785966543497855027')} Cria anéis espaciais`)
+	.setDescription(`${emoji('785966543497855027')} Cria anéis espaciais`)
 	.addFields(
     { name: 'd!anel 80 d8 d8 +2', value: '> Executa 80 tentativas rolando d8 d8 +2' }
   )
