@@ -6,7 +6,8 @@ class Status extends Model {
       user: DataTypes.STRING,
       label: DataTypes.STRING,
       max: DataTypes.INTEGER,
-      current: DataTypes.INTEGER
+      current: DataTypes.INTEGER,
+      color: DataTypes.STRING
     }, {
       sequelize
     })

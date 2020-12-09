@@ -1,9 +1,10 @@
 const Canvas = require('canvas')
 const Discord = require('discord.js')
+const { darken } = require('polished')
 
 const Status = require('../models/Status')
 
-const methodKeys = ['pool', 'add', 'current']
+const methodKeys = ['pool', 'add', 'current', 'color']
 
 const capitalize = text => {
   try {
@@ -13,9 +14,16 @@ const capitalize = text => {
   }
 }
 
+const verifyColor = color => {
+  if (!color.startsWith('#')) return false
+  if (color.length !== 7) return false
+  return true
+}
+
 const setStatus = {
-  pool: async (user, label, value, msg) => {
+  pool: async (user, label, newValue, msg) => {
     try {
+      const value = Number(newValue)
       const status = await Status.findOrCreate({
         where: { user, label }, defaults: {
           user,
@@ -31,11 +39,12 @@ const setStatus = {
     } catch (err) {
       console.log(err)
       msg.channel
-        .send("```diff\n- Tenha certeza de usar o comando corretamente\nExemplo: d!status hp:pool=100\n```")
+        .send('```diff\n- Tenha certeza de usar o comando corretamente\nExemplo: d!status hp:pool=100\n```')
     }
   },
-  add: async (user, label, value, msg) => {
+  add: async (user, label, newValue, msg) => {
     try {
+      const value = Number(newValue)
       const status = await Status.findOne({ where: { user, label } })
 
       if (status) {
@@ -47,28 +56,43 @@ const setStatus = {
         }
 
         if ((status.current + value) < (status.max * 0.1)) {
-          msg.channel.send("```fix\n- Você vai morrer seu desgraça\n```")
+          msg.channel.send('```fix\n- Você vai morrer seu desgraça\n```')
         }
 
         await status.increment({ current })
         
       } else {
-        msg.channel.send("```diff\n- Você não possui esta pool\n```")
+        msg.channel.send('```diff\n- Você não possui esta pool\n```')
       }
     } catch {
       msg.channel
-        .send("```diff\n- Tenha certeza de que você possui esta pool ou use o comando corretamente\nExemplo: d!status hp:add=5\n```")
+        .send('```diff\n- Tenha certeza de que você possui esta pool ou use o comando corretamente\nExemplo: d!status hp:add=5\n```')
     }
   },
-  current: async (user, label, value, msg) => {
+  current: async (user, label, newValue, msg) => {
     try {
+      const value = Number(newValue)
       const status = await Status.findOne({ where: { user, label } })
       const current = value < 0 ? 0 : value > status.max ? status.max : value
 
       await status.update({ current })
     } catch {
       msg.channel
-        .send("```diff\n- Tenha certeza de usar o comando corretamente\nExemplo: d!status hp:current=45\n```")
+        .send('```diff\n- Tenha certeza de usar o comando corretamente\nExemplo: d!status hp:current=45\n```')
+    }
+  },
+  color: async (user, label, value, msg) => {
+    try {
+      if (verifyColor(value)) {
+        const status = await Status.findOne({ where: { user, label } })
+        await status.update({ color: value })
+      } else {
+        msg.channel.send('```diff\n- Tenha certeza de usar uma cor hexadecimal válida.\n```')
+      }
+    } catch (error) {
+      console.log(error)
+      msg.channel
+        .send('```diff\n- Tenha certeza de usar o comando corretamente\nExemplo: d!status hp:color=#dcedc8\n```')
     }
   }
 }
@@ -81,7 +105,7 @@ const updateStatus = async (msg, args, user) => {
       const [method, value] = rest.split('=')
 
       if (methodKeys.includes(method)) {
-        await setStatus[method](user, label, Number(value), msg)
+        await setStatus[method](user, label, value, msg)
       } else {
         msg.channel.send("```diff\n- Apenas os métodos pool, add e current podem ser usados\n```")
       }
@@ -97,7 +121,7 @@ const updateStatus = async (msg, args, user) => {
 
 const colors = {
   max: ['#ef5350', '#8bc34a', '#42a5f5', '#ffca28', '#9575cd', '#ff5722'],
-  current: ['#e57373', '#dcedc8', '#bbdefb', '#ffecb3', '#d1c4e9', '#ffab91']
+  current: ['#e57373', '#dcedc8', '#bbdefb', '#ffecb3', '#d1c4e9', '#ffab91'],
 }
 
 const roundRect = (ctx, x, y, width, height, radius, fill, stroke) => {
@@ -163,9 +187,9 @@ const createImage = async (data, avatarURL) => {
   let positionTop = -20
   data.forEach((value, index) => {
     positionTop += 30
-    ctx.fillStyle = colors.max[index] || '#bdbdbd'
+    ctx.fillStyle = value.color ? darken(0.2, value.color) : (colors.max[index] || '#bdbdbd')
     roundRect(ctx, 140, positionTop + 10, canvas.width - 160, 20, 8, true)
-    ctx.fillStyle = colors.current[index] || '#e0e0e0'
+    ctx.fillStyle = value.color || colors.current[index] || '#e0e0e0'
     roundRect(ctx, 140, positionTop + 10, (canvas.width - 160) * value.current / value.max, 20, 8, true, false)
     ctx.font = '16px sans-serif'
     ctx.fillStyle = '#111'
