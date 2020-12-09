@@ -26,7 +26,12 @@ client.on('ready', () => {
 client.on('message', msg => {
   if (msg.author.bot) return;
   if (msg.channel.type == 'dm') return;
-  if (!msg.content.toLowerCase().startsWith(config.prefix)) return;
+  if (!msg.content.toLowerCase().startsWith(config.prefix)) {
+    if (msg.author.id === '346873158097174538') {
+      msg.react('👃')
+    }
+    return;
+  }
   if (msg.content.startsWith(`<@!${client.user.id}>`) || msg.content.startsWith(`<@${client.user.id}>`)) return;
 
   const args = msg.content
