@@ -1,6 +1,5 @@
 const Status = require('../models/Status')
 const StatusMessage = require('../models/StatusMessage')
-const Alias = require('../models/Alias')
 const { getValues, createImage, updateStatus } = require('../utils/status')
 const {
   isMaster,
@@ -21,7 +20,7 @@ module.exports.run = async (client, msg, args) => {
     const hasPermission = player || master
 
     if (!member) {
-      msg.channel.send('```diff\n- Digite o alias/id do player corretamente.\n```')
+      msg.channel.send('```diff\n- Escolha um Player válido\n```')
     }
     else if (hasPermission) {
       await updateStatus(msg, args, user)
