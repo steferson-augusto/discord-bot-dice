@@ -2,49 +2,53 @@ const Status = require('../models/Status')
 const StatusMessage = require('../models/StatusMessage')
 const Alias = require('../models/Alias')
 const { getValues, createImage, updateStatus } = require('../utils/status')
-const { isMaster, isMember, isPlayer, getChannel, getMemberAvatarURL } = require('../utils/services')
+const {
+  isMaster,
+  isMember,
+  isPlayer,
+  getChannel,
+  getMemberAvatarURL,
+  getUsersMention,
+} = require('../utils/services')
 
-module.exports.run = async (client, msg, args) => {
-  let user = msg.author.id
-  
+module.exports.run = async (client, msg, args) => {  
   const master = isMaster()
-  if (master) {
-    const userId = args.shift()
-    const alias = await Alias.findOne({ where: { label: userId } })
-    user = alias.user || userId
-  }
+  const player = isPlayer()
+  const users = master ? await getUsersMention() : [msg.author.id]
 
-  const member = await isMember(user)
-  const hasPermission = isPlayer() || master
+  users.forEach(async user => {
+    const member = await isMember(user)
+    const hasPermission = player || master
 
-  if (!member) {
-    msg.channel.send('```diff\n- Digite o alias/id do player corretamente.\n```')
-  }
-  else if (hasPermission) {
-    await updateStatus(msg, args, user)
-
-    const values = getValues(user)
-    const statuses = await Status.findAll({ where: { user } })
-    
-    if (statuses.length === 0) {
-      await Status.bulkCreate(values)
+    if (!member) {
+      msg.channel.send('```diff\n- Digite o alias/id do player corretamente.\n```')
     }
+    else if (hasPermission) {
+      await updateStatus(msg, args, user)
 
-    const data = statuses.length > 0 ? statuses : values
-    // const avatarURL = await msg.author.displayAvatarURL({ format: 'jpg' })
-    const avatarURL = await getMemberAvatarURL(user)
+      const values = getValues(user)
+      const statuses = await Status.findAll({ where: { user } })
+      
+      if (statuses.length === 0) {
+        await Status.bulkCreate(values)
+      }
 
-    const attachment = await createImage(data, avatarURL)
-    
-    // msg.delete().catch(() => {})
-    msg.channel.send(attachment)
+      const data = statuses.length > 0 ? statuses : values
+      // const avatarURL = await msg.author.displayAvatarURL({ format: 'jpg' })
+      const avatarURL = await getMemberAvatarURL(user)
 
-    if (args.length > 0) {
-      const channel = getChannel('784837970905006120')
-      const { id: message } = await channel.send(attachment)
-      StatusMessage.create({ user, message }, { channel })
+      const attachment = await createImage(data, avatarURL)
+      
+      // msg.delete().catch(() => {})
+      msg.channel.send(attachment)
+
+      if (args.length > 0) {
+        const channel = getChannel('784837970905006120')
+        const { id: message } = await channel.send(attachment)
+        StatusMessage.create({ user, message }, { channel })
+      }
+    } else {
+      msg.channel.send('```diff\n- Você precisa do cargo "Player" ou "Mestre" para usar este comando.\n```')
     }
-  } else {
-    msg.channel.send('```diff\n- Você precisa do cargo "Player" ou "Mestre" para usar este comando.\n```')
-  }
+  })
 }

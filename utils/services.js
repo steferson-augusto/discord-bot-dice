@@ -51,6 +51,17 @@ const getMemberAvatarURL = async id => {
   return avatarURL
 }
 
+const getUsersMention = async () => msg.mentions.users.array().map(user => user.id)
+
 module.exports = {
-  isMaster, isPlayer, isMember, check, emoji, getChannel, isChannel, getMemberAvatarURL, setMessage
+  isMaster,
+  isPlayer,
+  isMember,
+  check,
+  emoji,
+  getChannel,
+  isChannel,
+  getMemberAvatarURL,
+  setMessage,
+  getUsersMention
 }
