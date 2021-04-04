@@ -41,7 +41,7 @@ module.exports.run = async (client, msg, args) => {
   const textFix = fix > 0 ? ` +${fix}` : fix < 0 ? ` -${fix}` : ''
 
   text = text.substring(2)
-  const result = `[${text}]${ampliacao > 0 ? `{${ampliacao}}` : ''}${textFix}: ${value}`
+  const result = `[${text}]${ampliacao > 0 ? `{${ampliacao}}` : ''}${textFix}: ${value + fix}`
 
   const name = msg.author.username
   const avatarUrl = await msg.author.displayAvatarURL({ format: 'jpg' })
@@ -61,7 +61,6 @@ module.exports.run = async (client, msg, args) => {
       message.delete()
     }, 5000)
   }
-
 
   msg.delete()
 }
