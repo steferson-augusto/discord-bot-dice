@@ -39,7 +39,11 @@ module.exports.run = async (client, msg, args) => {
       const attachment = await createImage(data, avatarURL)
       
       // msg.delete().catch(() => {})
-      msg.channel.send(attachment)
+      const messageSended = await msg.channel.send(attachment)
+      setTimeout(() => {
+        messageSended.delete()
+        msg.delete()
+      }, 5000)
 
       if (args.length > 0) {
         const channel = getChannel('784837970905006120')
