@@ -3,9 +3,26 @@ const roll = require('../utils/roll')
 const { getChannel, isChannel } = require('../utils/services')
 
 module.exports.run = async (client, msg, args) => {
-  // colocar de modo educativo
-  const dificuldade = Number(args.shift())
   const quantidade = Number(args.shift()) || 1
+  const dificuldade = Number(args.shift())
+
+  if (quantidade < 1) {
+    const message = await msg.channel.send('```diff\n-A quantidade mínima é 1```')
+    setTimeout(() => {
+      msg.delete()
+      message.delete()
+    }, 5000)
+    return
+  }
+
+  if (dificuldade < 2) {
+    const message = await msg.channel.send('```diff\n-A dificuldade mínima é 2```')
+    setTimeout(() => {
+      msg.delete()
+      message.delete()
+    }, 5000)
+    return
+  }
 
   let acertos = 0
   for (let index = 0; index < quantidade; index++) {
@@ -21,8 +38,10 @@ module.exports.run = async (client, msg, args) => {
 
   const embed = new Discord.MessageEmbed()
   .setAuthor(name, avatarUrl)
-  .setTitle(`d!mroll ${label}`)
+  .setTitle('Multi Roll')
   .addField('Tentativas', quantidade, true)
+  .addField('Dificuldade', dificuldade, true)
+  .addField('Dados', label, false)
   .addField('Acertos', acertos, true)
 
   if (isChannel('681342318334443569')) {
