@@ -54,6 +54,18 @@
   <img src="./github/roll.png" style="border-radius: 6px;" alt="Rolagem comum" width="640" >
 </p>
 
+<h3>d!mroll dificuldade quantidade [...dados]</h3>
+
+<p>
+O primeiro parâmetro é a quantidade de tentativas, o segundo parâmetro é a dificuldade das rolagens e o restante são os dados das rolagens.
+</p>
+
+> d!mroll 20 8 d6 +5 -1
+
+<p align="center">
+  <img src="./github/mroll.png" style="border-radius: 6px;" alt="Rolagem comum" width="240" >
+</p>
+
 <h3>d!anel quantidade [...dados]</h3>
 
 <p>
@@ -65,7 +77,6 @@
 <p align="center">
   <img src="./github/anel.png" style="border-radius: 6px;" alt="Forja de anéis espaciais" width="640" >
 </p>
-
 
 <h3>d!status {...params}</h3>
 <p>
@@ -112,6 +123,16 @@
 
 <p align="center">
   <img src="./github/status_current.png" style="border-radius: 6px;" alt="Alterar valor" width="640" >
+</p>
+
+<h3>d!forja_arma quantidade grau peso tempo_dedicado [...dados]</h3>
+
+<b>quantidade</b> é a quantidade de tentativas realizadas<br><b>grau</b> é o grau da arma desejada<br><b>peso</b> é o peso da arma desejada<br><b>tempo_dedicado</b> é o tempo a mais ou a menos de dedicação para construção daquela arma, de maneira que cada unidade representa 30 minutos e influncia na dificuldade da rolagem
+
+> d!forja_arma 50 2 3 1 5d12 2d4 12
+
+<p align="center">
+  <img src="./github/forja_arma.png" style="border-radius: 6px;" alt="Forja de anéis espaciais" width="360" >
 </p>
 
 
